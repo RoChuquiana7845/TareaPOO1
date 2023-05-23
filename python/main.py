@@ -3,9 +3,8 @@ from reportlab.pdfgen import canvas
 from datetime import date
 
 
-class tienda:
-    def __init__(self,id, nombre, ruc, ubicacion):
-        self.id= id
+class Tienda:
+    def __init__(self, nombre, ruc, ubicacion):
         self.nombre= nombre
         self.ruc= ruc
         self.ubicacion= ubicacion
@@ -14,7 +13,7 @@ class tienda:
         return f"{self.id} - {self.nombre} - {self.ruc} - {self.ubicacion}"
 
 
-class inventario:
+class Inventario:
     def __init__(self, id, stock, min_stock, producto):
         self.id = id
         self.stock = stock 
@@ -31,9 +30,10 @@ class inventario:
     def abastecer(self):
         if self.stock < self.min_stock:
             print("****ALERTA***\nCantidad de producto de {self.producto.nombre} esta por debajo del minimo, llamar al proveedor :'c")
+        self.stock += int(input('Ingrese la cantidad de producto añadido'))
+            
         
-        
-class producto:
+class Producto:
     def _init_(self, id , nombre, precio, tipo_producto):
         self.id=id
         self.nombre= nombre
@@ -64,7 +64,7 @@ class producto:
         print(f'***Producto***\n Nombre: {self.nombre} \n Precio_sinIVA: {self.precio} \n Tipo: {self.tipo_producto.tipo} \n Impuesto: {self.tipo_producto.impuesto} ')
                     
                 
-class tipo_producto:
+class Tipo_producto:
     def __init__(self, id, tipo, impuesto):
         self.id = id
         self.tipo = tipo
@@ -75,8 +75,8 @@ class tipo_producto:
    
     
     
-class cliente:
-    def _init_ (self, id, nombre, cedula):
+class Cliente:
+    def _init_ (self, id, nombre = 'Consumidor final', cedula = '999999999'):
         self.id=id
         self.nombre= nombre
         self.correo= cedula
@@ -84,17 +84,24 @@ class cliente:
     def __str__( self):
         return f"{self.id}- {self.nombre} - {self.cedula}"
                         
-class venta:
-    def __init__(self,id, cliente, detalle_venta, fecha, total_venta, total_producto):
+class Venta:
+    def __init__(self,id, cliente, fecha):
         self.id=id
         self.cliente = cliente
-        self.detalle_venta = detalle_venta
+        self.detalle_venta = []
         self.fecha=fecha
-        self.total_venta= total_venta
-        self.total_producto= total_producto
+        self.total_venta= 0
+        self.total_producto= 0
         
     def __str__(self):
         return f" {self.id} - {self.detalle} - {self.fecha} - {self.totalVenta}"
+    
+    def detallar_venta(self):
+        cantidad_producto = int(input("Ingrese la cantidad de producto"))
+        detalle = Detalle_venta(self.id, cantidad_producto)
+        self.detalle.calcular_subtotal()
+        self.detalle_venta.append(detalle)
+    
     
     def imprimir_factura(self, nombre, ruc, correo): 
         w, h = letter
@@ -122,21 +129,22 @@ class venta:
         
         print('**Factura realizada**')
     
-class detalle_venta:
-    def __init__(self, id, producto, cantidad, subtotal):
+class Detalle_venta:
+    def __init__(self, id, producto, cantidad):
         self.id = id
         self.producto = producto
         self.cantidad = cantidad
-        self.subtotal = subtotal 
+        self.subtotal = 0
         
     def __str__(self):
         return f"{self.id} - {self.producto} - {self.cantidad} - {self.subtotal}"
 
-class reporte_tienda: 
-    def __init__(self, id, fecha, venta):
+    def calcular_subtotal(self):
+        self.subtotal = (self.producto.precio+self.producto.precio.tipo_producto.impuesto)*self.cantidad
+class Reporte_tienda: 
+    def __init__(self, id, fecha):
         self.id = id
         self.fecha = fecha
-        self.venta = venta
         self.ingresos = 0
     
     def calcular_producto_popular(self, nombres_productos):
@@ -189,7 +197,66 @@ class reporte_tienda:
         
 
 def run(): 
-    print('hELLO')
+    print('***Menú***\n1:Crear nuevo producto\n2:Visualizar un producto\n3:Modificar un producto\n4:Abastecer un producto\n5:Vender un producto \n6:Calcular estadistica de venta\n7:Salir')
+    opcion = int(input('Eliga un opción'))
+    contador_producto = 0
+    productos_registrados = []
+    ventas_registradas = []
+    contador_ventas = 0
+    bodega = []
+    contador_clientes = 0
+    clientes_registrados = []
+    historial_reportes = []
+    contador_reportes = 0
+    
+    match opcion:
+        case 1: 
+            contador_producto += 1
+            nombre = input('Ingrese el nombre del producto')
+            precio = int(input('Ingrese el precio del producto'))
+            tipo = input('Ingrese el tipo del producto ingresado')
+            impuesto = int(input('Ingrese el valor del impuesto'))
+            tipo_producto = Tipo_producto(contador_producto, tipo, impuesto)
+            producto = producto(contador_producto, nombre, precio,tipo_producto )
+            productos_registrados.append(producto)
+            stock = int(input('Ingrese el stock del producto'))
+            min_stock = int(input("Ingrese la cantidad mínima para abastecer"))
+            inventario = Inventario(contador_producto, stock, min_stock, producto)
+            bodega.append(inventario)
+        case 2:
+            indice = int(input('Ingrese el id del producto a visualizar'))
+            productos_registrados[indice-1].visualizar_producto()
+        case 3:
+            indice = int(input('Ingrese el id del producto a modificar'))
+            productos_registrados[indice-1].modificar_producto()
+        case 4: 
+            indice = int(input('Ingrese el id del producto a abastecer'))
+            bodega[indice-1].abastecer()
+        case 5: 
+            contador_ventas += 1
+            opcion = int(input('Ingrese un opción:\n1:Consumidor final\n2:Factura con datos'))
+            match opcion:
+                case 1:
+                    contador_clientes += 1
+                    cliente = Cliente()
+                    clientes_registrados.append(cliente)
+                case 2:
+                    contador_clientes += 1
+                    nombre = input('Ingrese el nombre del cliente')
+                    cedula = int(input('Ingrese el número de cédula del cliente')) 
+                    cliente = Cliente(contador_clientes, nombre, cedula)
+                    clientes_registrados.append(cliente)                
+            venta = Venta(contador_ventas, cliente, date.today())
+            ventas_registradas.append(venta)
+            tienda = Tienda("Todo Barato", 1520423, "Milagro")
+            venta.imprimir_factura(tienda.nombre, tienda.ruc, tienda.ubicacion)
+        case 6:
+            contador_reportes += 1
+            reporte_tienda = Reporte_tienda(contador_reportes, date.today(),)
+        case 7:
+            exit()
+            
+                    
 
 if __name__ == "__main__":
     run()
