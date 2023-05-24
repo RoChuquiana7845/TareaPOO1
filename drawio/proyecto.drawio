@@ -82,7 +82,7 @@
                 <mxCell id="55" value="-ruc" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="51" vertex="1">
                     <mxGeometry y="95" width="140" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="140" value="-dirección" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="51">
+                <mxCell id="140" value="-dirección" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="51" vertex="1">
                     <mxGeometry y="115" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="136" style="html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;endArrow=none;endFill=0;entryX=1.007;entryY=1.05;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="61" target="38" edge="1">
@@ -120,7 +120,7 @@
                 <mxCell id="67" value="operations" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="61" vertex="1">
                     <mxGeometry y="203" width="140" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="139" value="+calcular_subtotal()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="61">
+                <mxCell id="139" value="+calcular_subtotal()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="61" vertex="1">
                     <mxGeometry y="223" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="68" value="+Imprimir factura()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="61" vertex="1">
@@ -144,11 +144,11 @@
                 <mxCell id="76" value="-cedula" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="72" vertex="1">
                     <mxGeometry y="115" width="140" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="121" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=-0.015;entryY=0.936;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;startArrow=diamond;startFill=0;endArrow=none;endFill=0;" parent="1" source="81" target="68" edge="1">
+                <mxCell id="121" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=-0.015;entryY=0.936;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;startArrow=diamond;startFill=1;endArrow=none;endFill=0;" parent="1" source="81" target="68" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="81" value="reporte_tienda" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=55;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="-2460" y="540" width="140" height="183" as="geometry"/>
+                    <mxGeometry x="-2460" y="540" width="140" height="203" as="geometry"/>
                 </mxCell>
                 <mxCell id="82" value="attributes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
                     <mxGeometry y="55" width="140" height="20" as="geometry"/>
@@ -162,14 +162,17 @@
                 <mxCell id="138" value="-ingresos." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
                     <mxGeometry y="115" width="140" height="20" as="geometry"/>
                 </mxCell>
+                <mxCell id="141" value="-ventas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="81">
+                    <mxGeometry y="135" width="140" height="20" as="geometry"/>
+                </mxCell>
                 <mxCell id="89" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="81" vertex="1">
-                    <mxGeometry y="135" width="140" height="8" as="geometry"/>
+                    <mxGeometry y="155" width="140" height="8" as="geometry"/>
                 </mxCell>
                 <mxCell id="90" value="operations" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
-                    <mxGeometry y="143" width="140" height="20" as="geometry"/>
+                    <mxGeometry y="163" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="91" value="+generar_estadistica()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="81" vertex="1">
-                    <mxGeometry y="163" width="140" height="20" as="geometry"/>
+                    <mxGeometry y="183" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="103" style="edgeStyle=none;html=1;entryX=1.001;entryY=0.833;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;endArrow=diamond;endFill=0;" parent="1" source="94" target="44" edge="1">
                     <mxGeometry relative="1" as="geometry"/>

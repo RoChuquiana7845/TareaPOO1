@@ -141,35 +141,32 @@ class Detalle_venta:
 
     def calcular_subtotal(self):
         self.subtotal = (self.producto.precio+self.producto.precio.tipo_producto.impuesto)*self.cantidad
+        
+        
 class Reporte_tienda: 
     def __init__(self, id, fecha):
         self.id = id
         self.fecha = fecha
         self.ingresos = 0
-    
-    def calcular_producto_popular(self, nombres_productos):
-        productos_vendidos = []
-        productos_vendidos.append(self.venta.detalle_venta.producto)
-        ocurrencias_producto = {}
-        contador = 0
-        for x in nombres_productos: 
-            if x == nombres_productos[contador]:
-                ocurrencias_producto[x] = productos_vendidos.count(x)
-                contador += 1
-        max = 0
-        for values in ocurrencias_producto.values():
-            if max < values:
-                max = values
-                
-        for key, item in ocurrencias_producto.items():
-            if max == item: 
-                self.producto_popular = key 
-                print(f"El producto más popular es {self.producto_popular}")
-    
-                
-                
+        self.ventas = {'cliente': [], 'productos': [], "valor_venta": []}
         
-    def calcular_producto_impopular(self, nombres_productos):
+    def calcular_producto_popular(self, id):
+        contador_ventas += 1
+        opcion = int(input('Ingrese un opción:\n1:Consumidor final\n2:Factura con datos'))
+        match opcion:
+            case 1:
+                cliente = Cliente(id)
+            case 2:
+                nombre = input('Ingrese el nombre del cliente')
+                cedula = int(input('Ingrese el número de cédula del cliente')) 
+                cliente = Cliente( id, nombre, cedula)  
+        self.ventas['cliente'].append(cliente.nombre)              
+        venta = Venta(id, cliente, date.today())
+        tienda = Tienda("Todo Barato", 1520423, "Milagro")
+        venta.imprimir_factura(tienda.nombre, tienda.ruc, tienda.ubicacion)
+    
+                
+    def calcular__producto_impopular(self, nombres_productos):
         productos_vendidos = []
         productos_vendidos.append(self.venta.detalle_venta.producto)
         ocurrencias_producto = {}
@@ -233,26 +230,14 @@ def run():
             indice = int(input('Ingrese el id del producto a abastecer'))
             bodega[indice-1].abastecer()
         case 5: 
-            contador_ventas += 1
-            opcion = int(input('Ingrese un opción:\n1:Consumidor final\n2:Factura con datos'))
-            match opcion:
-                case 1:
-                    contador_clientes += 1
-                    cliente = Cliente()
-                    clientes_registrados.append(cliente)
-                case 2:
-                    contador_clientes += 1
-                    nombre = input('Ingrese el nombre del cliente')
-                    cedula = int(input('Ingrese el número de cédula del cliente')) 
-                    cliente = Cliente(contador_clientes, nombre, cedula)
-                    clientes_registrados.append(cliente)                
-            venta = Venta(contador_ventas, cliente, date.today())
-            ventas_registradas.append(venta)
-            tienda = Tienda("Todo Barato", 1520423, "Milagro")
-            venta.imprimir_factura(tienda.nombre, tienda.ruc, tienda.ubicacion)
+            
         case 6:
             contador_reportes += 1
-            reporte_tienda = Reporte_tienda(contador_reportes, date.today(),)
+            reporte_tienda = Reporte_tienda(contador_reportes, date.today())
+            opcion = int(input('Qué desee calcular: 1:Producto popular\n2:Producto impopular\n3:Ingresos\n4:Promedio dinero x producto'))
+            match opcion:
+                case 1:
+                    reporte_tienda.calcular_producto_popular()
         case 7:
             exit()
             
