@@ -1,247 +1,217 @@
-from reportlab.lib.pagesizes import A4, letter
-from reportlab.pdfgen import canvas
 from datetime import date
 
 
-class Tienda:
-    def __init__(self, nombre, ruc, ubicacion):
-        self.nombre= nombre
-        self.ruc= ruc
-        self.ubicacion= ubicacion
-        
-    def __str__(self):
-        return f"{self.id} - {self.nombre} - {self.ruc} - {self.ubicacion}"
-
-
-class Inventario:
+class Inventario: 
     def __init__(self, id, stock, min_stock, producto):
         self.id = id
-        self.stock = stock 
-        self.min_stock = min_stock 
-        self.producto
+        self.stock = stock
+        self.min_stock = min_stock
+        self.producto = producto
     
     def __str__(self):
         return f"{self.id} - {self.stock} - {self.min_stock} - {self.producto}"
     
-    def actualizar(self, productos_vendidos, tipo):
-        if tipo == self.producto.tipo_producto.tipo:
-            self.stock -= productos_vendidos
-        
-    def abastecer(self):
-        if self.stock < self.min_stock:
-            print("****ALERTA***\nCantidad de producto de {self.producto.nombre} esta por debajo del minimo, llamar al proveedor :'c")
-        self.stock += int(input('Ingrese la cantidad de producto añadido'))
-            
-        
-class Producto:
-    def _init_(self, id , nombre, precio, tipo_producto):
-        self.id=id
-        self.nombre= nombre
-        self.precio= precio
-        self.tipo_producto = tipo_producto
-        
-    def __str__( self):
-        return f"{self.id} - {self.nombre} - {self.precio}"
+    def actualizar(self, productos_vendidos):
+        self.stock -= productos_vendidos
     
-    def modificar_producto(self):
-        print('Ingresa el número de la opción')
-        while True:
-            try:
-                opcion = int(input('Qué desea modificar?:\n1:nombre\n2:precio'))
-            except ValueError:
-                print('Entrada invalida, solo se acepta números')
-            else: 
-                if 1 <= opcion <= 2:
-                    match opcion: 
-                        case 1:
-                            self.nombre = input('Ingrese el nuevo nombre del producto: ')
-                        case 2:
-                            self.precio = input('Ingrese el nuevo precio del producto: ')
-                else:
-                    print('Opcion fuera de rango')
+    def abastecer(self, nuevo_stock):
+        self.stock += nuevo_stock
+
+
+class Producto: 
+    def __init__(self, id, nombre, precio, tipo_producto):
+        self.id = id
+        self.nombre = nombre
+        self.precio = precio
+        self.tipo_producto = tipo_producto
+    
+    def __str__(self):
+        return f"{self.id} - {self.nombre} - {self.precio} - {self.tipo_producto}"
+    
+    def modificar_producto(self, nombre = '', precio = 0, tipo =''):
+        if nombre != '':
+            self.nombre = nombre
+        if precio != 0:
+            self.precio = precio    
+        if tipo != '':
+            self.tipo_producto.tipo = tipo 
+            self.tipo_producto.impuesto = int(input('Ingrese el impuesto del producto'))
         
-    def visualizar_producto(self):
-        print(f'***Producto***\n Nombre: {self.nombre} \n Precio_sinIVA: {self.precio} \n Tipo: {self.tipo_producto.tipo} \n Impuesto: {self.tipo_producto.impuesto} ')
-                    
-                
-class Tipo_producto:
+        
+class TipoProducto:
     def __init__(self, id, tipo, impuesto):
         self.id = id
         self.tipo = tipo
         self.impuesto = impuesto
+        
+    def __str__(self):
+        return f"{self.id} - {self.tipo} - {self.impuesto}"
+    
+
+
+class Tienda:
+    def __init__(self, nombre, ruc, direccion):
+        self.nombre = nombre
+        self.ruc = ruc
+        self.direccion = direccion
     
     def __str__(self):
-        return f"{self.id} - {self.nombre} - {self.impuesto}"
-   
+        return f"{self.nombre} - {self.ruc} - {self.direccion}"
     
-    
-class Cliente:
-    def _init_ (self, id, nombre = 'Consumidor final', cedula = '999999999'):
-        self.id=id
-        self.nombre= nombre
-        self.correo= cedula
-        
-    def __str__( self):
-        return f"{self.id}- {self.nombre} - {self.cedula}"
-                        
+
 class Venta:
-    def __init__(self,id, cliente, fecha):
-        self.id=id
+    def __init__(self, id, cliente, fecha):
+        self.id = id
         self.cliente = cliente
+        self.fecha = fecha
         self.detalle_venta = []
-        self.fecha=fecha
-        self.total_venta= 0
-        self.total_producto= 0
-        
+        self.total_venta = 0
+    
     def __str__(self):
-        return f" {self.id} - {self.detalle} - {self.fecha} - {self.totalVenta}"
+        return f"{self.id} - {self.cliente} - {self.detalle_venta} - {self.fecha} - {self.total_venta}"
     
-    def detallar_venta(self):
-        cantidad_producto = int(input("Ingrese la cantidad de producto"))
-        detalle = Detalle_venta(self.id, cantidad_producto)
-        self.detalle.calcular_subtotal()
+    def detallar_venta(self, producto, cantidad):
+        detalle = DetalleVenta(self.id, producto, cantidad)
         self.detalle_venta.append(detalle)
-    
-    
-    def imprimir_factura(self, nombre, ruc, correo): 
-        w, h = letter
-        datos_tienda = [nombre, ruc, correo]
-        metadatos_venta = {'50': "Producto", '200': 'Cantidad', '300': 'Precio Unitario', '400': 'Impuesto', '500': 'Subtotal'}
-        values_venta = {'50': self.detalle_venta.producto.nombre, '200': self.detalle_venta.cantidad, '300': self.detalle_venta.producto.tipo_producto.impuesto, '400': self.detalle_venta.producto.tipo_producto.impuesto, '500': self.detalle_venta.subtotal}
-        factura = canvas.Canvas("Factura.pdf", pagesize =letter) 
-        factura.drawImage('./img/carrito_de_supermercado.png', 50, h-50, width=65, height=65)
-        factura.setFont('Times-Roman', 15)
-        i = 1
-        for x in datos_tienda:
-            factura.drawString(w/2, h-(50+i*16), f"{x}")
-            i += 1
-            if datos_tienda.index(x) == -1:
-                factura.drawString(50, h-(50+i*16), f"Cliente -> Nombre:{self.cliente.nombre} CI: {self.cliente.cedula}")
-                i += 1
-        factura.line(50, h-(50+i*16), w-50, h-(50+i*16))
-        i += 1
-        for key, value in metadatos_venta.items():
-            factura.drawString(key, h-(50+i*16), f"{value}")
-        factura.line(50, h-(50+(i+1)*16), w-50, h-(50+(i+1)*16))
+        self.total_venta = detalle.subtotal + detalle.subtotal * detalle.producto.tipo_producto.impuesto
         
-        for key, value in values_venta.items():
-            factura.drawString(key, h-(50+(i+2)*16), f"{value}")
-        
-        print('**Factura realizada**')
-    
-class Detalle_venta:
+    def mostrar(self, nombre, ruc, direccion):
+        print(f"Empresa: {nombre}\nRuc: {ruc}\nDirección: {direccion}")
+        print(f"Número de venta: {self.id} fecha: {self.fecha} Cliente: {self.cliente.nombre} Total de venta: {self.total_venta}")
+
+
+class DetalleVenta:
     def __init__(self, id, producto, cantidad):
         self.id = id
         self.producto = producto
         self.cantidad = cantidad
-        self.subtotal = 0
-        
+        self.subtotal = producto.precio * cantidad
+    
     def __str__(self):
         return f"{self.id} - {self.producto} - {self.cantidad} - {self.subtotal}"
+        
 
-    def calcular_subtotal(self):
-        self.subtotal = (self.producto.precio+self.producto.precio.tipo_producto.impuesto)*self.cantidad
-        
-        
-class Reporte_tienda: 
+class EstadisticaTienda: 
     def __init__(self, id, fecha):
         self.id = id
         self.fecha = fecha
+        self.prod_popular = ''
+        self.prod_impopular = ''
         self.ingresos = 0
-        self.ventas = {'cliente': [], 'productos': [], "valor_venta": []}
+        self.prom_diner_prod = 0
+    
+    def __str__(self):
+        return f"{self.id} - {self.fecha} - {self.prod_popular} - {self.prod_impopular} - {self.ingresos} - {self.prom_diner_prod}"
+
+    def calcular_ingresos(self, *args):
+        for n in args:
+            self.ingresos += n
+        print(f"Los ingresos de la tienda son {self.ingresos}")
+    
+    def determinar_prod_popular(self,**kargs):
+        maxi = 0
+        indice = 0
+        for value in kargs.values():
+            if maxi < value:
+                maxi = value
+                indice = list(kargs.values()).index(maxi)
+        self.prod_popular = list(kargs.keys())[indice]
+        print(f"El producto mas vendido es {self.prod_popular}")
+             
+    def determinar_prod_impopular(self, **kargs):
+        mini = 0
+        indice = 0
+        for value in kargs.values():
+            if mini > value:
+                mini = value
+                indice = list(kargs.values()).index(mini)
+        self.prod_impopular = list(kargs.keys())[indice]
+        print(f"El producto menos vendido es {self.prod_impopular}")
         
-    def calcular_producto_popular(self, id):
-        contador_ventas += 1
-        opcion = int(input('Ingrese un opción:\n1:Consumidor final\n2:Factura con datos'))
-        match opcion:
-            case 1:
-                cliente = Cliente(id)
-            case 2:
-                nombre = input('Ingrese el nombre del cliente')
-                cedula = int(input('Ingrese el número de cédula del cliente')) 
-                cliente = Cliente( id, nombre, cedula)  
-        self.ventas['cliente'].append(cliente.nombre)              
-        venta = Venta(id, cliente, date.today())
-        tienda = Tienda("Todo Barato", 1520423, "Milagro")
-        venta.imprimir_factura(tienda.nombre, tienda.ruc, tienda.ubicacion)
-    
-                
-    def calcular__producto_impopular(self, nombres_productos):
-        productos_vendidos = []
-        productos_vendidos.append(self.venta.detalle_venta.producto)
-        ocurrencias_producto = {}
-        contador, min = 0
-        for x in nombres_productos: 
-            if x == nombres_productos[contador]:
-                ocurrencias_producto[x] = productos_vendidos.count(x)
-                contador += 1
-                
-        for values in ocurrencias_producto.values():
-            if min < values:
-                min = values
-                
-        for key, item in ocurrencias_producto.items():
-            if max == item: 
-                self.producto_popular = key 
-                print(f"El producto impopular es {self.producto_popular}")
-    
-    def calcular_ingresos(self):
-        self.ingresos += self.venta.total_venta
-        
-    
-    def promedio_dinero_x_producto(self):
-        self.promedio_dinero_x_producto = self.ingresos / self.venta.total_producto
+    def promedio(self, *args):
+        suma = 0
+        for num in args:
+            suma += num
+        print(f"El promedio de dinero por producto vendido es {self.ingresos/suma}")
         
 
-def run(): 
-    print('***Menú***\n1:Crear nuevo producto\n2:Visualizar un producto\n3:Modificar un producto\n4:Abastecer un producto\n5:Vender un producto \n6:Calcular estadistica de venta\n7:Salir')
-    opcion = int(input('Eliga un opción'))
-    contador_producto = 0
-    productos_registrados = []
-    ventas_registradas = []
-    contador_ventas = 0
-    bodega = []
-    contador_clientes = 0
-    clientes_registrados = []
-    historial_reportes = []
-    contador_reportes = 0
+class Cliente:
+    def __init__(self, id, nombre, cedula):
+        self.id = id
+        self.nombre = nombre
+        self.cedula = cedula 
     
-    match opcion:
-        case 1: 
-            contador_producto += 1
-            nombre = input('Ingrese el nombre del producto')
-            precio = int(input('Ingrese el precio del producto'))
-            tipo = input('Ingrese el tipo del producto ingresado')
-            impuesto = int(input('Ingrese el valor del impuesto'))
-            tipo_producto = Tipo_producto(contador_producto, tipo, impuesto)
-            producto = producto(contador_producto, nombre, precio,tipo_producto )
-            productos_registrados.append(producto)
-            stock = int(input('Ingrese el stock del producto'))
-            min_stock = int(input("Ingrese la cantidad mínima para abastecer"))
-            inventario = Inventario(contador_producto, stock, min_stock, producto)
-            bodega.append(inventario)
-        case 2:
-            indice = int(input('Ingrese el id del producto a visualizar'))
-            productos_registrados[indice-1].visualizar_producto()
-        case 3:
-            indice = int(input('Ingrese el id del producto a modificar'))
-            productos_registrados[indice-1].modificar_producto()
-        case 4: 
-            indice = int(input('Ingrese el id del producto a abastecer'))
-            bodega[indice-1].abastecer()
-        case 5: 
-            
-        case 6:
-            contador_reportes += 1
-            reporte_tienda = Reporte_tienda(contador_reportes, date.today())
-            opcion = int(input('Qué desee calcular: 1:Producto popular\n2:Producto impopular\n3:Ingresos\n4:Promedio dinero x producto'))
-            match opcion:
-                case 1:
-                    reporte_tienda.calcular_producto_popular()
-        case 7:
-            exit()
-            
-                    
+    def __str__(self):
+        return f"{self.id} - {self.nombre} - {self.cedula}"
 
-if __name__ == "__main__":
-    run()
+
+#Crear un producto
+#Supermercado
+tipo1 = TipoProducto(1, "Supermercado", 0.04)
+prod1 = Producto(1,"Pepsi", 0.50, tipo1)
+#Visualizar un producto
+print(prod1)
+#Papelería
+tipo2 = TipoProducto(2, 'Papelería', 0.16)
+prod2 = Producto(2, "cuaderno", 1.20, tipo2)
+#Visualizar un producto
+print(prod2)
+#Droguería
+tipo3 = TipoProducto(3, 'Droguería', 0.12)
+prod3 = Producto(3, 'Paracetamol', 7.50, tipo3)
+#Visualizar un producto
+print(prod3)
+
+
+#Abastecer la tienda con un producto.
+invetario1 = Inventario(1,150, 40, prod1)
+invetario1.abastecer(120)
+invetario2 = Inventario(2, 450, 100, prod2)
+invetario2.abastecer(450)
+invetario3 = Inventario(3, 784, 150, prod3)
+invetario3.abastecer(561)
+
+
+#Vender un producto
+#Venta 1
+tienda = Tienda('Barato o Nada', "1204512345", "AV. Narnia y Gandalf")
+cliente1 = Cliente(1, 'Roberto', '1204578457')
+venta1 = Venta(1, cliente1, date.today())
+venta1.detallar_venta(prod1, 150)
+#Mostrar venta
+venta1.mostrar(tienda.nombre, tienda.ruc, tienda.direccion)
+invetario1.actualizar(150)
+
+#Venta 2
+cliente2 = Cliente(2,'Alan Backer', '06457456120')
+venta2 = Venta(2, cliente2, date.today())
+venta2.detallar_venta(prod2, 451)
+#Mostrar venta
+venta2.mostrar(tienda.nombre, tienda.ruc, tienda.direccion)
+invetario2.actualizar(451)
+
+cliente3 = Cliente(3, 'Morocho', '45120784120')
+venta3 = Venta(3, cliente3, date.today())
+venta3.detallar_venta(prod3,  1200)
+#Mostrar venta
+venta3.mostrar(tienda.nombre, tienda.ruc, tienda.direccion)
+invetario3.actualizar(120)
+
+#Modificar un producto
+prod1.modificar_producto(precio=0.55)
+print(prod1)
+prod2.modificar_producto(precio=1.70)
+print(prod2)
+prod3.modificar_producto(precio=8.90)
+print(prod3)
+
+#Estadisticas de venta
+estadistica = EstadisticaTienda(1, date.today())
+#Producto más vendido
+estadistica.determinar_prod_popular(Pepsi = 150, Cuaderno= 451, Paracetamol=1200)
+#Producto menos vendido
+estadistica.determinar_prod_impopular(Pepsi = 150, Cuaderno= 451, Paracetamol=1200)
+#Ingresos totales
+estadistica.calcular_ingresos(venta1.total_venta, venta2.total_venta, venta3.total_venta) 
+#Cantidad de dinero promedio obtenido por unidad de producto vendida
+estadistica.promedio(venta1.detalle_venta[-1].cantidad, venta2.detalle_venta[-1].cantidad, venta3.detalle_venta[-1].cantidad)
